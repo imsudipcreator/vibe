@@ -1,9 +1,9 @@
-// import Image from "next/image";
+'use server'
 
-export default function Home() {
+export default function Page() {
+  
   return (
-    <div className="text-yellow-600">
-      Hello World
+    <div>
     </div>
   );
 }
