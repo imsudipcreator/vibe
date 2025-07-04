@@ -6,6 +6,7 @@ import MessagesContainer from '../components/messages-container'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Fragment } from '@/generated/prisma'
 import ProjectHeader from '../components/project-header'
+import FragmentWeb from '../components/fragment-web'
 
 interface Props {
     projectId: string
@@ -40,7 +41,7 @@ function ProjectView({ projectId }: Props) {
                     defaultSize={65}
                     minSize={50}
                 >
-                    To-do : preview
+                    { !!activeFragment && <FragmentWeb data={activeFragment}/>}
                 </ResizablePanel>
             </ResizablePanelGroup>
 
