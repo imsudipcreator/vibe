@@ -34,7 +34,7 @@ export const codeAgentFunction = inngest.createFunction(
       system: PROMPT,
       description: "An expert coding agent",
       model: gemini({
-        model: "gemini-2.5-flash-lite-preview-06-17",
+        model: "gemini-2.5-flash",
         apiKey: process.env.GEMINI_API_KEY,
       }),
       // model: openai({
