@@ -1,3 +1,4 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { useTRPC } from '@/trpc/client'
 import { useQuery } from '@tanstack/react-query'
@@ -5,15 +6,22 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { useUser } from '@clerk/nextjs'
 
 
 
 const ProjectsList = () => {
     const trpc = useTRPC()
+    const { user } = useUser()
     const { data: projects } = useQuery(trpc.projects.getMany.queryOptions())
+
+    if (!user) return null
+    
     return (
         <div className='p-8 w-full bg-white dark:bg-sidebar rounded-xl border flex flex-col gap-y-6 sm:gap-y-4'>
-            <h2 className='text-3xl font-medium'>Your Vibes</h2>
+            <h2 className='text-3xl font-medium'>
+                {user?.firstName}&apos;s Vibes
+            </h2>
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-6'>
                 {projects?.length === 0 && (
                     <div className='col-span-full text-center'>
@@ -43,7 +51,7 @@ const ProjectsList = () => {
                                     </h3>
                                     <p className='text-sm text-muted-foreground'>
                                         {formatDistanceToNow(project.updatedAt, {
-                                            addSuffix : true
+                                            addSuffix: true
                                         })}
                                     </p>
                                 </div>
