@@ -22,10 +22,50 @@ function ProjectView({ projectId }: Props) {
     const isMobile = useIsMobile()
     const [activeFragment, setActiveFragment] = useState<Fragment | null>(null)
     const [tabState, setTabState] = useState<"preview" | "code">("preview")
+    const [mobileTabState, setMobileTabState] = useState<"preview" | "code" | "chat">("chat")
+
+
+
+    if (isMobile) {
+        return (
+            <div className='h-svh flex flex-col'>
+                <Suspense fallback={<div>Loading Header...</div>}>
+                    <ProjectHeader projectId={projectId} mobileTabState={mobileTabState} setMobileTabState={setMobileTabState} />
+                </Suspense>
+                <Tabs
+                    className='flex flex-col min-h-0 flex-1'
+                    value={mobileTabState}
+                >
+                    <TabsContent value='chat' asChild>
+                        <Suspense>
+                            <MessagesContainer
+                                projectId={projectId}
+                                activeFragment={activeFragment}
+                                setActiveFragment={setActiveFragment}
+                            />
+                        </Suspense>
+                    </TabsContent>
+                    <TabsContent value='preview'>
+                        {!!activeFragment && <FragmentWeb data={activeFragment} />}
+                    </TabsContent>
+                    <TabsContent value='code' className='min-h-0'>
+                        {!!activeFragment?.files && (
+                            <FileExplorer
+                                files={activeFragment.files as { [path: string]: string }}
+                            />
+                        )}
+                    </TabsContent>
+                </Tabs>
+
+
+            </div >
+        )
+
+    }
 
     return (
-        <div className='h-screen'>
-            <ResizablePanelGroup direction={isMobile ? 'vertical' : 'horizontal'}>
+        <div className='h-svh'>
+            <ResizablePanelGroup direction={'horizontal'}>
                 <ResizablePanel
                     defaultSize={35}
                     minSize={20}
@@ -77,7 +117,7 @@ function ProjectView({ projectId }: Props) {
                             {!!activeFragment && <FragmentWeb data={activeFragment} />}
                         </TabsContent>
                         <TabsContent value='code' className='min-h-0'>
-                            { !!activeFragment?.files && (
+                            {!!activeFragment?.files && (
                                 <FileExplorer
                                     files={activeFragment.files as { [path: string]: string }}
                                 />

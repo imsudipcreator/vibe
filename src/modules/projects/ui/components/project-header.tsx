@@ -1,8 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { useTRPC } from '@/trpc/client'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { ChevronDownIcon, ChevronLeftIcon, SunMoonIcon } from 'lucide-react'
+import { ChevronDownIcon, ChevronLeftIcon, CodeIcon, EyeIcon, MessageSquareCodeIcon, SunMoonIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,11 +12,14 @@ import React from 'react'
 
 interface Props {
     projectId: string
+    mobileTabState? : "preview" | "code" | "chat"
+    setMobileTabState? : React.Dispatch<React.SetStateAction<"preview" | "code" | "chat">>
 }
 
-const ProjectHeader = ({ projectId }: Props) => {
+const ProjectHeader = ({ projectId, mobileTabState, setMobileTabState }: Props) => {
+    const isMobile = useIsMobile()
     const trpc = useTRPC()
-    const { setTheme, theme} = useTheme()
+    const { setTheme, theme } = useTheme()
     const { data: project } = useSuspenseQuery(trpc.projects.getOne.queryOptions({
         id: projectId
     }))
@@ -47,10 +52,10 @@ const ProjectHeader = ({ projectId }: Props) => {
                             <span>Go to Dashboard</span>
                         </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator/>
+                    <DropdownMenuSeparator />
                     <DropdownMenuSub>
                         <DropdownMenuSubTrigger className='gap-2'>
-                            <SunMoonIcon className='size-4 text-muted-foreground'/>
+                            <SunMoonIcon className='size-4 text-muted-foreground' />
                             <span>Appearance</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
@@ -71,6 +76,29 @@ const ProjectHeader = ({ projectId }: Props) => {
                     </DropdownMenuSub>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+
+            {
+                isMobile && mobileTabState && setMobileTabState && (
+                    <Tabs
+                        defaultValue='chat'
+                        value={mobileTabState}
+                        onValueChange={(value) => setMobileTabState(value as "preview" | "code" | "chat")}
+                    >
+                        <TabsList>
+                            <TabsTrigger value='preview' className='rounded-md'>
+                                <EyeIcon />
+                            </TabsTrigger>
+                            <TabsTrigger value='code' className='rounded-md'>
+                                <CodeIcon />
+                            </TabsTrigger>
+                            <TabsTrigger value='chat' className='rounded-md'>
+                                <MessageSquareCodeIcon />
+                            </TabsTrigger>
+                        </TabsList>
+                    </Tabs>
+                )
+            }
         </header>
     )
 }
