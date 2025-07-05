@@ -57,7 +57,7 @@ const MessagesContainer = ({ projectId, activeFragment, setActiveFragment }: Pro
                 </div>
             </div>
 
-            <div className='relative pt-1 p-3'>
+            <div className='pt-1 p-3 relative'>
                 <div className='absolute -top-6 left-0 right-0 h-6 bg-gradient-to-b from-transparent to-background  pointer-events-none' />
                 <MessageForm projectId={projectId} />
             </div>
