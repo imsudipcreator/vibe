@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { inngest } from "./client";
 import { Sandbox } from "@e2b/code-interpreter";
 import {
