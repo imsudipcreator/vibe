@@ -30,6 +30,11 @@ function ProjectView({ projectId }: Props) {
     const [mobileTabState, setMobileTabState] = useState<"preview" | "code" | "chat">("chat")
 
 
+    if (isMobile === undefined) {
+        return (
+            <p>Loading...</p>
+        )
+    }
 
 
 
@@ -63,8 +68,6 @@ function ProjectView({ projectId }: Props) {
                         )}
                     </TabsContent>
                 </Tabs>
-
-
             </div >
         )
 
